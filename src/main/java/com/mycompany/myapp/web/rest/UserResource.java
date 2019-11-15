@@ -4,6 +4,7 @@ import com.mycompany.myapp.config.Constants;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
+import com.mycompany.myapp.security.SecurityUtils;
 import com.mycompany.myapp.service.MailService;
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.dto.UserDTO;
@@ -158,6 +159,14 @@ public class UserResource {
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<String> getAuthorities() {
         return userService.getAuthorities();
+    }
+
+    @GetMapping("/users/currentUser")
+    public Optional<String> getCurrentUser() {
+        Optional<String> currentUser;
+        currentUser = SecurityUtils.getCurrentUserLogin();
+        log.debug("^^^^^^^^^^^^^^^^^^^succes to UserResource & currentUser:{}",currentUser);
+        return currentUser;
     }
 
     /**

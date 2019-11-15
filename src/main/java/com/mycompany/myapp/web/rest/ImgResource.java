@@ -1,5 +1,6 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.security.SecurityUtils;
 import com.mycompany.myapp.service.ImgService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import com.mycompany.myapp.service.dto.ImgDTO;
@@ -21,6 +22,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,15 +62,18 @@ public class ImgResource {
     @PostMapping("/imgs")
     public ResponseEntity<ImgDTO> createImg(@RequestBody ImgDTO imgDTO) throws URISyntaxException, IOException {
         log.debug("REST request to save Img : {}", imgDTO);
-        log.debug("****Check image content type: {}",imgDTO.getImageContentType());
         if (imgDTO.getId() != null) {
             throw new BadRequestAlertException("A new img cannot already have an ID", ENTITY_NAME, "idexists");
         }
         byte[] bytes = imgDTO.getImage();
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        Date currentTime = new Date();
         Path path = Paths.get(UPLOADED_FOLDER + imgDTO.getImageName());
         Files.write(path, bytes);
 
         imgDTO.setImage_path(path.toString());
+        imgDTO.setWriter(SecurityUtils.getCurrentUserLogin().get());
+        imgDTO.setDate(format1.format(currentTime));
 
         ImgDTO result = imgService.save(imgDTO);
         return ResponseEntity.created(new URI("/api/imgs/" + result.getId()))

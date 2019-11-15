@@ -5,7 +5,7 @@ import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
 import { IImg } from 'app/shared/model/img.model';
-import { AccountService } from 'app/core';
+import { AccountService, User, UserService } from 'app/core';
 import { ImgService } from './img.service';
 
 @Component({
@@ -16,12 +16,14 @@ export class ImgComponent implements OnInit, OnDestroy {
   imgs: IImg[];
   currentAccount: any;
   eventSubscriber: Subscription;
+  currentUser: any;
 
   constructor(
     protected imgService: ImgService,
     protected jhiAlertService: JhiAlertService,
     protected eventManager: JhiEventManager,
-    protected accountService: AccountService
+    protected accountService: AccountService,
+    protected userService: UserService
   ) {}
 
   loadAll() {
@@ -41,10 +43,23 @@ export class ImgComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadAll();
+    this.getCurrentUser();
     this.accountService.identity().then(account => {
       this.currentAccount = account;
     });
     this.registerChangeInImgs();
+  }
+
+  getCurrentUser() {
+    this.userService
+      .getCurrentUser()
+      .pipe(
+        filter((mayBeOk: HttpResponse<string>) => mayBeOk.ok),
+        map((response: HttpResponse<string>) => response.body)
+      )
+      .subscribe(user => {
+        this.currentUser = user;
+      });
   }
 
   ngOnDestroy() {

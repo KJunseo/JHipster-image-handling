@@ -40,6 +40,7 @@
                             <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline">View</span>
                         </button>
+                       <div *ngIf="currentUser=='admin'||currentUser==img.writer">
                         <button type="submit"
                                 [routerLink]="['/img', img.id, 'edit']"
                                 class="btn btn-primary btn-sm">
@@ -54,6 +55,7 @@
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline">Delete</span>
                         </button>
+                        </div>
                     </div>
                 </td>
             </tr>
