@@ -38,7 +38,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://localhost:3306/image_handler?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: root
-    password:
+    password: kimjs0073!
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -123,3 +123,5 @@ jhipster:
 # ===================================================================
 
 # application:
+image:
+  path: /Users/kimjunseo/Desktop/2019-2/JHipster/image_handler/src/main/java/com/mycompany/myapp/image/

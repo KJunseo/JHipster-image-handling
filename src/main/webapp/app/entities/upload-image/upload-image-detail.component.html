@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="uploadImage">
+            <h2><span>Upload Image</span> {{uploadImage.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Image Name</span></dt>
+                <dd>
+                    <span>{{uploadImage.imageName}}</span>
+                </dd>
+                <dt><span>Image Path</span></dt>
+                <dd>
+                    <span>{{uploadImage.imagePath}}</span>
+                </dd>
+                <dt><span>Image</span></dt>
+                <dd>
+                    <div *ngIf="uploadImage.image">
+                        <a (click)="openFile(uploadImage.imageContentType, uploadImage.image)">
+                            <img [src]="'data:' + uploadImage.imageContentType + ';base64,' + uploadImage.image" style="max-width: 100%;" alt="uploadImage image"/>
+                        </a>
+                        {{uploadImage.imageContentType}}, {{byteSize(uploadImage.image)}}
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/upload-image', uploadImage.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>
